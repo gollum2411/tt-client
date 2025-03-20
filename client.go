@@ -88,7 +88,7 @@ func (c *Client) DoRequestAndParse(ctx context.Context, details *RequestDetails)
 		return fmt.Errorf("failed to execute http request: %w", err)
 	}
 
-	if resp.StatusCode < 200 && resp.StatusCode > 299 {
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		return ClientError{
 			StatusCode: resp.StatusCode,
 			Status:     resp.Status,
