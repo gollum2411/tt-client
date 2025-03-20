@@ -8,12 +8,10 @@ import (
 	"maps"
 	"net/http"
 	"net/url"
-	"sync"
 )
 
 type Client struct {
 	baseURL string
-	mtx     sync.Mutex
 	c       http.Client
 
 	defaultHeaders map[string][]string
@@ -54,10 +52,6 @@ type RequestDetails struct {
 }
 
 func (c *Client) DoRequestAndParse(ctx context.Context, details *RequestDetails) (err error) {
-	if c.mtx.TryLock() {
-		panic("dev error: forgot to lock client mutex")
-	}
-
 	path, err := url.JoinPath(c.baseURL, details.URI)
 	if err != nil {
 		return fmt.Errorf("failed to build url: %w", err)
